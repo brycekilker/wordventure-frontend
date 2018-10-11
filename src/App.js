@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios'
 
 class App extends Component {
+  onClick = () => {
+
+  }
+
+  componentDidMount() {
+    function goodCall (response) {
+      console.log(response.data[0].scenes[1])
+    }
+    function badCall(response) {
+      console.log("back call back")
+    }
+  axios.get('http://localhost:8080/api/stories').then(goodCall).catch(badCall)
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            <button onClick={this.onClick}>start story</button>
           </p>
           <a
             className="App-link"
