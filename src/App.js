@@ -1,39 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios'
+import StoryButton from './components/startButton.js'
 
 class App extends Component {
-  onClick = () => {
-
+  constructor(props){
+    super(props)
+    this.state = {
+      stories: {},
+    }
   }
 
   componentDidMount() {
-    function goodCall (response) {
-      console.log(response.data[0].scenes[1])
-    }
-    function badCall(response) {
-      console.log("back call back")
-    }
-  axios.get('http://localhost:8080/api/stories').then(goodCall).catch(badCall)
+  axios.get('http://localhost:8080/api/stories').then(res=>this.goodCall(res)).catch(err=>this.badCall(err))
   }
-
+  goodCall = (response) => {
+    console.log(this.state)
+    this.setState({stories: response.data[0].name})
+  }
+  badCall = (error)  => {
+    console.log(error)
+  }
+handleClick = (e) => {
+  console.log(this.state)
+}
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={"./images/BG.png"} className="battle-giraffe" alt="Battle Giraffe" />
           <p>
-            <button onClick={this.onClick}>start story</button>
+            <StoryButton stories={this.state.stories} />
+            <button onClick={this.handleClick}>start story</button>
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <h2>
+            Adventure!
+          </h2>
         </header>
       </div>
     );
