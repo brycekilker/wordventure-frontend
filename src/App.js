@@ -7,23 +7,35 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      stories: {},
+      name: "",
+      story: {},
+      options: []
     }
   }
 
   componentDidMount() {
-  axios.get('http://localhost:8080/api/stories').then(res=>this.goodCall(res)).catch(err=>this.badCall(err))
+    axios.get('http://localhost:8080/api/stories')
+      .then(res=>this.goodCall(res))
+      .catch(err=>this.badCall(err))
   }
+
   goodCall = (response) => {
-    console.log(this.state)
-    this.setState({stories: response.data[0].name})
+    this.setState({
+      story: response.data[0],
+      name: response.data[0].name
+    })
   }
+
   badCall = (error)  => {
     console.log(error)
   }
-handleClick = (e) => {
-  console.log(this.state)
-}
+
+  handleClick = (e) => {
+    axios.get('http://localhost:8080/api/scenes/5bbe2c89bd214407efdb7fb6/options')
+      .then(res=>this.setState({
+        options: res.data}))
+      .catch(err=>this.badCall(err))
+  }
   render() {
     return (
       <div className="App">
@@ -34,8 +46,9 @@ handleClick = (e) => {
             <button onClick={this.handleClick}>start story</button>
           </p>
           <h2>
-            Adventure!
+            {this.state.name}
           </h2>
+          {this.state.options.map(option=> <p> {option.name} </p>)}
         </header>
       </div>
     );
