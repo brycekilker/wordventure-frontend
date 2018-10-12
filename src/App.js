@@ -8,8 +8,10 @@ class App extends Component {
     super(props)
     this.state = {
       name: "",
+      sceneName: "",
       story: {},
-      options: []
+      options: [],
+      scene: {}
     }
   }
 
@@ -22,7 +24,8 @@ class App extends Component {
   goodCall = (response) => {
     this.setState({
       story: response.data[0],
-      name: response.data[0].name
+      name: response.data[0].name,
+    **  sceneName: response.data[0].sceneName
     })
   }
 
@@ -35,6 +38,12 @@ class App extends Component {
       .then(res=>this.setState({
         options: res.data}))
       .catch(err=>this.badCall(err))
+
+      axios.get('http://localhost:8080/api/scenes/5bbe2c89bd** 214407efdb7fb6/sceneName')
+      .then(res=>this.setState({
+        scene: res.data,
+        sceneName: res.data.name}))
+        .catch(err=>this.badCall(err))
   }
   render() {
     return (
@@ -48,6 +57,9 @@ class App extends Component {
           <h2>
             {this.state.name}
           </h2>
+            <h3>
+              {this.state.sceneName}
+            </h3>
           {this.state.options.map(option=> <p> {option.name} </p>)}
         </header>
       </div>
